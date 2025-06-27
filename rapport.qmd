@@ -176,9 +176,9 @@ Votre premier problème test sera le problème polynomial vu en classe.
 
 ```{julia}
 f(x) = 2*x[1]^3 - 3*x[1]^2 - 6*x[1]*x[2]* (x[1] - x[2] - 1)
-model = ADNLPModel(f, [1.0, 1.0])
-x1 = newton_modifiee(model)
-x2 = newton_inexacte(model)
+model = ADNLPModel(f, [1.5, 0.5])
+result1 = newton_modifiee(model)
+result2 = newton_inexacte(model)
 ```
 
 Utiliser ensuite les problèmes non linéaires du dépôt `OptimizationProblems.jl` qui sont sans contraintes et ont 100 variables.
@@ -199,21 +199,26 @@ Parmis ces problèmes, choisissez-en 3 et illustrez le comportement de chacune d
 
 ```{julia}
 
-test3 = OptimizationProblems.ADNLPProblems.qqchose()
+test3 = OptimizationProblems.ADNLPProblems.brybnd()
 x3 = newton_modifiee(test3)
 ```
 
 ## Validation de la méthode de Newton tronquée
 
 ```{julia}
-test1 = OptimizationProblems.ADNLPProblems.qqchos()
+test1 = OptimizationProblems.ADNLPProblems.srosenbr()
 x1 = newton_inexacte(test1)
-test2 = OptimizationProblems.ADNLPProblems.qqchos()
+test2 = OptimizationProblems.ADNLPProblems.argtrig()
 x2 = newton_inexacte(test2)
-test3 = OptimizationProblems.ADNLPProblems.qqchos()
+test3 = OptimizationProblems.ADNLPProblems.brybnd()
 x3 = newton_inexacte(test3)
 ```
 
 ## Commentaires sur les résultats
 
-<!-- Insérer ici votre évaluation des résultats -->
+- Au niveau de la vitesse de convergence, on constate que la méthode de Newton modifiée semble converger en moins d'itérations sur les problèmes de petite taille, comme le problème polynomial. Toutefois, il faut noter que la méthode modifiée requiert plus de ressources mémoire pour la factorisation complète du Hessien.
+
+- La méthode de Newton inexacte peut parfois nécessiter plus d'itérations internes du solveur CG pour des problèmes mal conditionnés, mais l'adaptation de η permet d'améliorer la convergence.
+
+- Les deux méthodes montrent une réduction rapide de la norme du gradient près de la solution optimale.
+
